@@ -2,7 +2,7 @@
 /*
 Plugin Name: Revue
 Description: The Revue plugin allows you to quickly add a signup form for your Revue list.
-Version: 1.1.0
+Version: 1.2.0
 Author: Revue
 Author URI: https://www.getrevue.co
 */
