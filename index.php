@@ -1,16 +1,33 @@
 <?php
-/*
-Plugin Name: Revue
-Description: The Revue plugin allows you to quickly add a signup form for your Revue list.
-Version: 1.1.0
-Author: Revue
-Author URI: https://www.getrevue.co
-*/
+/**
+ * Plugin Name:   Revue
+ * Description:   The Revue plugin allows you to quickly add a signup form for your Revue list.
+ * Author:        Revue
+ * Author URI:    https://www.getrevue.co
+ * Version:       1.2.0-alpha
+ * Text Domain:   revue
+ * Domain Path:   /languages/
+ * License:       GPLv2 (or later)
+ */
 
-define( 'REVUE_TRANS_DOMAIN', 'revue' );
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+include_once 'widget.php';
+
 $_revue_printed_forms = 0;
 
-include_once 'widget.php';
+
+add_action( 'plugins_loaded', 'revue_load_textdomain' );
+/**
+ * Load textdomain
+ *
+ * @since 1.2
+ */
+function revue_load_textdomain() {
+	$lang_dir = dirname( plugin_basename( __FILE__ ) ) . '/languages/';
+	load_plugin_textdomain( 'revue', false, $lang_dir );
+}
 
 
 function revue_ajaxurl() {
@@ -28,10 +45,10 @@ function revue_admin_settings() {
 	<div class="wrap wrap-revue">
 		<img src="<?php echo plugins_url( 'images/logo.png', __FILE__ ); ?>" style="margin-top: 20px; width: 100px;"/>
 
-		<p style="font-size: 18px; line-height: 28px;margin-bottom: 40px;">In order to connect to Revue, we need you to
+		<p style="font-size: 18px; line-height: 28px;margin-bottom: 40px;">
+			<?php echo sprintf( __( 'In order to connect to Revue, we need you to
 			enter your API key. You can find<br/>
-			this key on the bottom of the <a target="_blank" style="color: #E15718;"
-			                                 href="https://www.getrevue.co/app/integrations">Integrations page.</a>
+			this key on the bottom of the <a target="_blank" style="color: #E15718;"  href="%s">Integrations page.</a>', 'revue' ), 'https://www.getrevue.co/app/integrations' ); ?>
 		</p>
 
 		<form method="post" action="options.php">
@@ -43,8 +60,9 @@ function revue_admin_settings() {
 			?>
 		</form>
 
-		<p style="color: #999;font-size: 12px;margin-top: 20px;">Need help? Just <a style="color: #999;" href="mailto:support@getrevue.co">shoot
-				us an email</a>.</p>
+		<p style="color: #999;font-size: 12px;margin-top: 20px;">
+			<?php echo sprintf( __( 'Need help? Just <a style="color: #999;" href="%s">shoot us an email</a>.', 'revue' ), 'mailto:support@getrevue.co' ) ?>
+		</p>
 	</div>
 	<?php
 }
@@ -78,14 +96,14 @@ function revue_page_init() {
 
 	add_settings_section(
 		'revue_api_settings', // ID
-		__( 'API Settings', REVUE_TRANS_DOMAIN ), // Title
+		__( 'API Settings', 'revue' ), // Title
 		null,
 		'revue-settings' // Page
 	);
 
 	add_settings_field(
 		'api_key', // ID
-		__( 'Fill out your API key:', REVUE_TRANS_DOMAIN ),
+		__( 'Fill out your API key:', 'revue'),
 		'revue_api_key_callback',
 		'revue-settings', // Page
 		'revue_api_settings' // Section
@@ -107,7 +125,7 @@ function revue_subscribe_callback() {
 
 	echo json_encode( array(
 		'thank_you' => sprintf(
-			'Thanks for subscribing to my email digest. You can find older issues <a href="%s">here</a> via <a href="%s">Revue</a>.',
+			__('Thanks for subscribing to my email digest. You can find older issues <a href="%s">here</a> via <a href="%s">Revue</a>.','revue'),
 			revue_get_profile_url(),
 			'https://www.getrevue.co/?utm_campaign=Wordpress+plugin&utm_content=Confirmation&utm_medium=web'
 		)
@@ -124,16 +142,16 @@ function revue_subscribe_form() {
 	$_revue_printed_forms ++;
 
 	if ( ! _revue_key_provided() ) {
-		return 'Please provide an API key in the Revue settings.';
+		return __( 'Please provide an API key in the Revue settings.', 'revue' );
 	}
 
 	$res = '';
 
 	$res .= '<div class="revue-subscribe">';
-	$res .= _revue_print_field( 'E-mail', 'revue_email', 'email' );
-	$res .= _revue_print_field( 'Firstname', 'revue_first_name', 'text' );
-	$res .= _revue_print_field( 'Lastname', 'revue_last_name', 'text' );
-	$res .= '<button type="submit">' . __( 'Subscribe', REVUE_TRANS_DOMAIN ) . '</button>';
+	$res .= _revue_print_field( __( 'E-mail', 'revue' ), 'revue_email', 'email' );
+	$res .= _revue_print_field( __( 'Firstname', 'revue' ), 'revue_first_name', 'text' );
+	$res .= _revue_print_field( __( 'Lastname', 'revue' ), 'revue_last_name', 'text' );
+	$res .= '<button type="submit">' . __( 'Subscribe', 'revue' ) . '</button>';
 	$res .= '</div>';
 
 	return $res;
@@ -149,7 +167,7 @@ function _revue_print_field( $label, $name, $type ) {
 	$res = '';
 
 	$res .= '<p>';
-	$res .= '<label for="' . $id . '">' . __( $label, REVUE_TRANS_DOMAIN ) . '</label><br>';
+	$res .= '<label for="' . $id . '">' .$label. '</label><br>';
 	$res .= '<input type="' . $type . '" name="' . $name . '" id="' . $id . '" />';
 	$res .= '</p>';
 
@@ -232,7 +250,7 @@ add_action( 'admin_head', 'revue_admin_styles' );
 
 function revue_admin_placeholder() {
 	echo '<script type="text/javascript">';
-	echo 'jQuery(function($) { $(".wrap-revue #api_key").attr("placeholder", "Your API key"); });';
+	echo 'jQuery(function($) { $(".wrap-revue #api_key").attr("placeholder", ' . __( "Your API key", 'revue') . '); });';
 	echo '</script>';
 }
 

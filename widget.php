@@ -1,13 +1,17 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
 class Revue_Widget extends WP_Widget {
 
 	function __construct() {
 		parent::__construct(
 			'revue_widget',
-			__( 'Revue subscription widget', REVUE_TRANS_DOMAIN ),
+			__( 'Revue subscription widget', 'revue' ),
 			array(
-				'description' => __( 'Subscribe users to your Revue list', REVUE_TRANS_DOMAIN ),
+				'description' => __( 'Subscribe users to your Revue list', 'revue' ),
 			)
 		);
 	}
@@ -22,15 +26,15 @@ class Revue_Widget extends WP_Widget {
 	}
 
 	public function form( $instance ) {
-		$title = ! empty( $instance['title'] ) ? $instance['title'] : __( 'New title', 'text_domain' );
+		$title = ! empty( $instance['title'] ) ? $instance['title'] : __( 'New title', 'revue' );
 
 		if ( ! _revue_key_provided() ) {
-			echo '<p>Please provide an API key under Settings > Revue</p>';
+			echo '<p>' . __( 'Please provide an API key under Settings > Revue', 'revue' ) . '</p>';
 		}
 
 		?>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'revue' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>"
 			       name="<?php echo $this->get_field_name( 'title' ); ?>" type="text"
 			       value="<?php echo esc_attr( $title ); ?>">
