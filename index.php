@@ -1,10 +1,11 @@
 <?php
+<<<<<<< HEAD
 /**
  * Plugin Name:   Revue
  * Description:   The Revue plugin allows you to quickly add a signup form for your Revue list.
  * Author:        Revue
  * Author URI:    https://www.getrevue.co
- * Version:       1.2.0-alpha
+ * Version:       1.2.0
  * Text Domain:   revue
  * Domain Path:   /languages/
  * License:       GPLv2 (or later)
