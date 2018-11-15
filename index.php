@@ -1,5 +1,4 @@
 <?php
-<<<<<<< HEAD
 /**
  * Plugin Name:   Revue
  * Description:   The Revue plugin allows you to quickly add a signup form for your Revue list.
